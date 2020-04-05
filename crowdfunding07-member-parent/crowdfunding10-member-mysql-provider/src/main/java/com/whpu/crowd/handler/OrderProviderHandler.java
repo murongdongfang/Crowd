@@ -3,6 +3,7 @@ package com.whpu.crowd.handler;
 
 import com.whpu.crowd.entity.vo.AddressVO;
 import com.whpu.crowd.entity.vo.OrderProjectVO;
+import com.whpu.crowd.entity.vo.OrderVO;
 import com.whpu.crowd.service.api.OrderService;
 import com.whpu.crowd.util.ResultEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,22 @@ public class OrderProviderHandler {
 	
 	@Autowired
 	private OrderService orderService;
-	
+
+	@RequestMapping("/save/order/remote")
+	ResultEntity<String> saveOrderRemote(@RequestBody OrderVO orderVO) {
+
+		try {
+			orderService.saveOrder(orderVO);
+
+			return ResultEntity.successWithoutData();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return ResultEntity.failed(e.getMessage());
+		}
+
+	}
 	@RequestMapping("/save/address/remote")
 	public ResultEntity<String> saveAddressRemote(@RequestBody AddressVO addressVO) {
 		

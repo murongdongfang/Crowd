@@ -19,6 +19,7 @@ import java.util.List;
 
 @FeignClient("crowd-mysql-provider-9001")
 public interface MySqlRemoteService {
+
   @RequestMapping("/get/project/detail/remote/{projectId}")
   public ResultEntity<DetailProjectVO> getDetailProjectVORemote(@PathVariable("projectId") Integer projectId);
 

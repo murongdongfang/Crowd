@@ -26,9 +26,13 @@ zuul:
     crowd-project: #配置member-project的路由规则
       service-id: crowd-project-consumer-9004
       path: /project/**
-    member-pay:
+    crowd-order:
       service-id: crowd-order-consumer-9005
       path: /order/**
+    crowd-pay:
+      service-id: crowd-pay-consumer-9006
+      path: /pay/**
+
 ribbon:        #设置ribbon的超时时间小于zuul的超时时间
   ReadTimeout: 10000
   ConnectTimeout: 10000

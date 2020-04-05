@@ -3,8 +3,11 @@ package com.whpu.crowd.service.impl;
 
 import com.whpu.crowd.entity.po.AddressPO;
 import com.whpu.crowd.entity.po.AddressPOExample;
+import com.whpu.crowd.entity.po.OrderPO;
+import com.whpu.crowd.entity.po.OrderProjectPO;
 import com.whpu.crowd.entity.vo.AddressVO;
 import com.whpu.crowd.entity.vo.OrderProjectVO;
+import com.whpu.crowd.entity.vo.OrderVO;
 import com.whpu.crowd.mapper.AddressPOMapper;
 import com.whpu.crowd.mapper.OrderPOMapper;
 import com.whpu.crowd.mapper.OrderProjectPOMapper;
@@ -31,6 +34,29 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private AddressPOMapper addressPOMapper;
 
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+	@Override
+	public void saveOrder(OrderVO orderVO) {
+
+		OrderPO orderPO = new OrderPO();
+
+		BeanUtils.copyProperties(orderVO, orderPO);
+
+		OrderProjectPO orderProjectPO = new OrderProjectPO();
+
+		BeanUtils.copyProperties(orderVO.getOrderProjectVO(), orderProjectPO);
+
+		// 保存orderPO自动生成的主键是orderProjectPO需要用到的外键
+		orderPOMapper.insert(orderPO);
+
+		// 从orderPO中获取orderId
+		Integer id = orderPO.getId();
+
+		// 将orderId设置到orderProjectPO
+		orderProjectPO.setOrderId(id);
+
+		orderProjectPOMapper.insert(orderProjectPO);
+	}
 	@Override
 	public OrderProjectVO getOrderProjectVO(Integer projectId, Integer returnId) {
 		return orderProjectPOMapper.selectOrderProjectVO(returnId).get(0);
