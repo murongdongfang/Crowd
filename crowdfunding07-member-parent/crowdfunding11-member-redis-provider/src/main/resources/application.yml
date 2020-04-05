@@ -1,0 +1,17 @@
+server:
+  port: 9002
+
+spring:
+  application:
+    name: corwd-redis-provider-9002
+  redis:
+    host: 192.168.159.160
+
+
+eureka:
+  instance:
+    instance-id: corwd-redis-provider-9002
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka

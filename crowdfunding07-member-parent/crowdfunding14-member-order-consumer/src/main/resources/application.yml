@@ -1,0 +1,20 @@
+server:
+  port: 9005
+spring:
+  thymeleaf:
+    suffix: .html
+    prefix: classpath:/templates/
+    cache: false
+  redis:
+    host: 192.168.159.160
+  session:
+    store-type: redis
+  application:
+    name: crowd-order-consumer-9005
+eureka:
+  instance:
+    instance-id: crowd-order-consumer-9005
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka/

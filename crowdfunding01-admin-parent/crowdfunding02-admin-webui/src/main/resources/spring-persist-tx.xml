@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+			    http://www.springframework.org/schema/beans/spring-beans.xsd
+			    http://www.springframework.org/schema/context
+			    http://www.springframework.org/schema/context/spring-context.xsd
+			    http://www.springframework.org/schema/aop
+			    http://www.springframework.org/schema/aop/spring-aop.xsd
+			    http://www.springframework.org/schema/tx
+			    http://www.springframework.org/schema/tx/spring-tx.xsd http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+
+<!--    多个spring配置文件分开写，各个部分必须使用improt导入-->
+<!--    <import resource="classpath:spring-persist-mybatis.xml"></import>-->
+    <context:component-scan base-package="com.whpu.crowd.service">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--       配置事务管理器-->
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="txManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    
+<!--    配置事务消息通知，
+        针对查询方法，配置只读属性
+        针对增删改方法，配置传播属性        
+-->
+    <tx:advice transaction-manager="txManager" id="txAdvice">
+        <tx:attributes>
+<!--            针对查询方法配置只读属性，查询的时候存在一定的优化-->
+            <tx:method name="query*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="count*" read-only="true"/>
+<!--
+        针对增删改方法配置事务隔离级别和回滚异常
+        REQUIRES_NEW：A调用B，A方法上是否存在事务B都会新开一个事务，A事务的回滚不会造成B事务的回滚
+        REQUIRED：事务传播行为的默认行为，A调用B，B必须运行在一个事务上
+        A方法上有事务则B加入A的事务，B方法上没有事务则B新开一个事务，A，B运行在一个事务上，要回滚一起回滚
+        rollback-for：回滚异常，默认是在RuntimeException会回滚，建议使用Exception，编译期间异常也会回滚
+        注意：在基于xml的声明式事务配置中，tx:method是必须要配置的，如果没有配置，那么事务对这个方法就不生效，即使事务存在默认配置。
+-->
+            <tx:method name="save*" propagation="REQUIRES_NEW" rollback-for="java.lang.Exception"></tx:method>
+            <tx:method name="update*" propagation="REQUIRES_NEW" rollback-for="java.lang.Exception"></tx:method>
+            <tx:method name="remove*" propagation="REQUIRES_NEW" rollback-for="java.lang.Exception"></tx:method>
+            <tx:method name="batch*" propagation="REQUIRES_NEW" rollback-for="java.lang.Exception"></tx:method>
+        </tx:attributes>
+    </tx:advice>
+    
+<!--    配置AOP事务增强，里边配置事务通知和切入点表达式-->
+    <aop:config>
+        <aop:pointcut id="point" expression="execution(* *..*ServiceImpl.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="point"></aop:advisor>
+    </aop:config>
+
+
+</beans>

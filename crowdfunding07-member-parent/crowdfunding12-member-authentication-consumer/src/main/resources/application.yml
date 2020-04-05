@@ -1,0 +1,38 @@
+server:
+  port: 9003
+
+spring:
+  application:
+    name: crowd-authentication-consumer-9003
+  thymeleaf:
+    suffix: .html
+    prefix: classpath:/templates/
+    cache: false
+  redis:
+    host: 192.168.159.160
+  session:
+      store-type: redis
+
+eureka:
+  instance:
+    instance-id: crowd-authentication-consumer-9003
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka
+short:
+  message:
+    app-code: 3c5cda341fe94f2bbd68b40ca0867142
+    path: /chuangxinsms/dxjk
+    host: https://cxkjsms.market.alicloudapi.com
+    method: POST
+    sign:
+    skin:
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
+
+#ribbon:
+#  ReadTimeout: 10000
+#  ConnectionTimeout: 10000
+

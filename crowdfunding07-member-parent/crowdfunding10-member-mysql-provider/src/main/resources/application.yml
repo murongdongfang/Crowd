@@ -1,0 +1,30 @@
+server:
+  port: 9001
+
+spring:
+  datasource:
+    name: mydb
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/project_crowd?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  application:
+    name: crowd-mysql-provider-9001
+
+
+eureka:
+  instance:
+    instance-id: crowd-mysql-provider-9001
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka
+
+mybatis:
+  mapper-locations: classpath:/mybatis/mappers/*.xml
+  config-location: classpath:/mybatis/mybatis-config.xml
+logging:
+  level:
+    com.whpu.crowd.mapper: debug
+    com.whpu.crowd.test: debug

@@ -1,0 +1,35 @@
+server:
+  port: 80
+spring:
+  application:
+    name: crowd-zuul-80
+  redis:
+    host: 192.168.159.160
+  session:
+    store-type: redis
+
+eureka:
+  instance:
+    instance-id: crowd-zuul-80
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka
+
+zuul:
+  ignored-services: "*"  #*必须要加""，否则会报错""可以转义
+  sensitive-headers: "*" # 在 Zuul 向其他微服务重定向时保持原本头信息（请求头、响应 头）
+  routes:
+    corwd-portal:
+      service-id: crowd-authentication-consumer-9003
+      path: /**
+    crowd-project: #配置member-project的路由规则
+      service-id: crowd-project-consumer-9004
+      path: /project/**
+    member-pay:
+      service-id: crowd-order-consumer-9005
+      path: /order/**
+ribbon:        #设置ribbon的超时时间小于zuul的超时时间
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
+

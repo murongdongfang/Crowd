@@ -1,0 +1,31 @@
+server:
+  port: 9004
+spring:
+  redis:
+    host: 192.168.159.160
+  session:
+    store-type: redis
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  application:
+    name: crowd-project-consumer-9004
+#阿里云oss对象存储服务配置
+aliyun:
+  oss:
+    access-key-id: LTAI4FfehcLYiEdqEC6nuc3U
+    access-key-secret: zg4U4f3DDYwSb2BdBXRlrZdORcdLmm
+    #https://xxh-crowd-project.oss-cn-beijing.aliyuncs.com/crowd/pic/JDK1.6.png
+    bucket-domain: https://xxh-crowd-project.oss-cn-beijing.aliyuncs.com
+    bucket-name: xxh-crowd-project
+    end-point: oss-cn-beijing.aliyuncs.com  #bucket-domain的oss后面部分
+
+
+eureka:
+  instance:
+    instance-id: crowd-project-consumer-9004
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka
