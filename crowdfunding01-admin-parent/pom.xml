@@ -18,7 +18,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- 声明属性，对Spring的版本进行统一管理 -->
-    <whpu.spring.version>4.3.20.RELEASE</whpu.spring.version>
+    <whpu.spring.version>5.3.18</whpu.spring.version>
   </properties>
 
   <dependencyManagement>
